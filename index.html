@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will You Be My Valentine?</title>
+  <style>
+    /* Falling hearts (subtle) */
+    .hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .heart {
+      position: absolute;
+      color: rgba(255, 77, 77, 0.3);
+      font-size: 20px;
+      animation: fall 12s linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-100%) translateX(0); opacity: 0.5; }
+      100% { transform: translateY(100vh) translateX(50px); opacity: 0; }
+    }
+
+    /* Glass-morphism container */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(45deg, #fff0f0, #ffe6e6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 30px 20px;
+      width: 85%;
+      max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      z-index: 1;
+      text-align: center;
+      animation: heartbeat 2s infinite;
+    }
+
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    h1 {
+      color: #ff4d4d;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
+      font-weight: 300;
+    }
+
+    p {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+
+    /* Buttons */
+    .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 120px;
+    }
+
+    #yes {
+      background: rgba(255, 77, 77, 0.9);
+      color: white;
+    }
+
+    #yes:hover {
+      background: #ff4d4d;
+      transform: scale(1.05);
+    }
+
+    #no {
+      background: rgba(255, 255, 255, 0.8);
+      color: #666;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    #no:hover {
+      background: rgba(255, 255, 255, 1);
+    }
+
+    /* Custom elegant modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 300px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: modalFade 0.3s ease-out;
+    }
+
+    @keyframes modalFade {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-text {
+      color: #666;
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* "Yes" modal accent color */
+    #yesModal .modal-content {
+      border: 1px solid rgba(255, 77, 77, 0.2);
+    }
+
+    .modal-close {
+      background: rgba(255, 77, 77, 0.9);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+      background: #ff4d4d;
+      transform: scale(1.05);
+    }
+
+    /* Confetti redesign */
+    .confetti {
+      position: fixed;
+      width: 8px;
+      height: 15px;
+      background: #ff4d4d;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 1;
+      animation: confetti-spray 2.5s ease-out forwards;
+    }
+
+    @keyframes confetti-spray {
+      0% {
+        transform: translateY(0) rotate(0deg) translateX(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) rotate(360deg) translateX(100px);
+        opacity: 0;
+      }
+    }
+
+    /* Varying confetti colors and directions */
+    .confetti:nth-child(odd) {
+      background: #ff9f43;
+      transform: translateX(-50vw) rotate(45deg);
+    }
+    .confetti:nth-child(even) {
+      background: #2ecc71;
+      transform: translateX(50vw) rotate(-45deg);
+    }
+
+     /* Follow-up modal styles */
+     .follow-up-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .follow-up-modal-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 30px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 300px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      animation: modalFade 0.3s ease-out;
+    }
+
+    .follow-up-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .follow-up-buttons button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .follow-up-buttons #followUpYes {
+      background: rgba(255, 77, 77, 0.9);
+      color: white;
+    }
+
+    .follow-up-buttons #followUpYes:hover {
+      background: #ff4d4d;
+      transform: scale(1.05);
+    }
+
+    .follow-up-buttons #followUpNo {
+      background: rgba(255, 255, 255, 0.8);
+      color: #666;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .follow-up-buttons #followUpNo:hover {
+      background: rgba(255, 255, 255, 1);
+    }
+
+  </style>
+</head>
+<body>
+
+     <!-- "Yes" Modal -->
+  <div class="modal" id="yesModal">
+    <div class="modal-content">
+      <p class="modal-text">
+        Wow, did you just click yes? If so, are you allowing me to take you on a simple date like coffee and photobooth on February 14, 2025?
+      </p>
+      <div class="follow-up-buttons">
+        <button id="followUpYes">Yes</button>
+        <button id="followUpNo">No</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Follow-up "Yes" Modal -->
+  <div class="follow-up-modal" id="followUpYesModal">
+    <div class="follow-up-modal-content">
+      <p class="modal-text">
+        Thanks for allowing me! 💖<br><br>
+        I can’t wait to make February 14, 2025, a day to remember!
+      </p>
+      <button class="modal-close" onclick="closeModal('followUpYesModal')">Close</button>
+    </div>
+  </div>
+
+  <!-- Follow-up "No" Modal -->
+  <div class="follow-up-modal" id="followUpNoModal">
+    <div class="follow-up-modal-content">
+      <p class="modal-text">
+        💐 Your honesty means everything to me.<br><br>
+        Though my heart hoped for a different answer, I deeply respect your choice. 
+        Thank you for being part of my life.
+      </p>
+      <button class="modal-close" onclick="closeModal('followUpNoModal')">Close</button>
+    </div>
+  </div>
+
+    <!-- Add this modal HTML -->
+  <div class="modal" id="noModal">
+    <div class="modal-content">
+      <p class="modal-text">
+        💐 Your honesty means everything to me.<br><br>
+        Though my heart hoped for a different answer, I deeply respect your choice. 
+        Thank you for being part of my life.
+      </p>
+      <button class="modal-close" onclick="closeModal('noModal')">Close</button>
+    </div>
+  </div>
+
+  <div class="hearts" id="hearts"></div>
+
+  <div class="container">
+    <h1>Will You Be My Valentine? 💘</h1>
+    <p>Someting tells me you're the missing piece to a great Valentine’s Day. Want to test the theory?</p>
+    <div class="buttons">
+      <button id="yes">Absolutely Yes!</button>
+      <button id="no">No</button>
+    </div>
+  </div>
+
+  <script>
+    // Initialize EmailJS with your User ID
+    emailjs.init('ITpKIq1Vuj7sDuACq'); // Replace with your EmailJS User ID
+
+    // Function to send email
+    function sendEmail(fromName, message) {
+      emailjs.send('service_b56ljbt', 'template_jtvhxya', {
+        from_name: fromName,
+        message: message,
+      })
+      .then(() => {
+        console.log('Email sent successfully!');
+      })
+      .catch((error) => {
+        console.error('Failed to send email:', error);
+      });
+    }
+
+    // Confetti.js logic for "Yes" button
+    const yesButton = document.getElementById('yes');
+    yesButton.addEventListener('click', () => {
+      showModal('yesModal');
+      triggerConfetti();
+      sendEmail('Valentine', 'Clicked "Absolutely Yes!"');
+    });
+
+    // Follow-up "Yes" button
+    const followUpYesButton = document.getElementById('followUpYes');
+    followUpYesButton.addEventListener('click', () => {
+      closeModal('yesModal');
+      showModal('followUpYesModal');
+      sendEmail('Valentine', 'Clicked "Yes" for the date on February 14, 2025!');
+    });
+
+    // Follow-up "No" button
+    const followUpNoButton = document.getElementById('followUpNo');
+    followUpNoButton.addEventListener('click', () => {
+      closeModal('yesModal');
+      showModal('followUpNoModal');
+      sendEmail('Valentine', 'Clicked "No" for the date on February 14, 2025.');
+    });
+
+    // Realistic confetti burst
+    function triggerConfetti() {
+      confetti({
+        particleCount: 100,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        colors: ['#ff4d4d', '#ff9f43', '#ff69b4'],
+        startVelocity: 35,
+      });
+
+      confetti({
+        particleCount: 100,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        colors: ['#ff4d4d', '#ff9f43', '#ff69b4'],
+        startVelocity: 35,
+      });
+
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ['#ff4d4d', '#ff69b4'],
+        scalar: 1.2,
+      });
+    }
+
+    // Modal logic
+    function showModal(modalId) {
+      document.getElementById(modalId).style.display = 'flex';
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
+
+    window.onclick = (event) => {
+      if (event.target.className === 'modal' || event.target.className === 'follow-up-modal') {
+        event.target.style.display = 'none';
+      }
+    };
+
+  </script>
+   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+   <script type="text/javascript"
+  src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</body>
+</html>
