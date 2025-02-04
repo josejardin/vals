@@ -2,454 +2,550 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine?</title>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        /* Falling Hearts Animation */
-        .hearts {
-            position: fixed;
-            top: -10%;
-            left: 0;
-            width: 100%;
-            height: 120%;
-            pointer-events: none;
-            z-index: 0;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Will You Be My Valentine?</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <style>
+    /* Falling Hearts */
+    .hearts {
+      position: fixed;
+      top: -10%;
+      left: 0;
+      width: 100%;
+      height: 120%;
+      pointer-events: none;
+      z-index: 1;
+    }
 
-        .heart {
-            position: absolute;
-            color: rgba(255, 77, 77, 0.3);
-            font-size: 24px;
-            animation: fall 12s linear infinite;
-            opacity: 0;
-        }
+    .heart {
+      position: absolute;
+      color: rgba(255, 77, 77, 0.3);
+      font-size: 24px;
+      animation: fall 12s linear infinite;
+      opacity: 0;
+    }
 
-        @keyframes fall {
-            0% {
-                transform: translateY(-10vh) translateX(0);
-                opacity: 0.5;
-            }
+    @keyframes fall {
+      0% {
+        transform: translateY(-10vh) translateX(0);
+        opacity: 0.5;
+      }
 
-            100% {
-                transform: translateY(110vh) translateX(100px);
-                opacity: 0;
-            }
-        }
+      100% {
+        transform: translateY(110vh) translateX(100px);
+        opacity: 0;
+      }
+    }
 
-        /* Base Styles */
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(45deg, #fff0f0, #ffe6e6);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            position: relative;
-            overflow-x: hidden;
-        }
+    /* Base Styles */
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(45deg, #fff0f0, #ffe6e6);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      position: relative;
+      overflow-x: hidden;
+    }
 
-        /* Glassmorphism Container */
-        .container {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 40px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            animation: heartbeat 2s infinite;
-            position: relative;
-            z-index: 1;
-        }
+    /* Main Container */
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 20px;
+      width: 80%;
+      max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      animation: heartbeat 2s infinite;
+      position: relative;
+      z-index: 1;
+    }
 
-        /* Typography */
-        h1 {
-            color: #ff4d4d;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            font-weight: 300;
-        }
+    h1 {
+      color: #ff4d4d;
+      font-size: 2rem;
+      margin-bottom: 20px;
+      font-weight: 300;
+    }
 
-        p {
-            color: #666;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
+    p {
+      color: #666;
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 30px;
+    }
 
-        /* Buttons */
-        .buttons {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+    /* Buttons */
+    .buttons {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
 
-        button {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 120px;
-        }
+    button {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 120px;
+    }
 
-        #yes {
-            background: rgba(255, 77, 77, 0.9);
-            color: white;
-        }
+    .btn-yes {
+      background: linear-gradient(135deg, #ff6b6b, #ff4d4d);
+      color: white;
+    }
 
-        #yes:hover {
-            background: #ff4d4d;
-            transform: scale(1.05);
-        }
+    .btn-yes:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(255, 77, 77, 0.3);
+    }
 
-        #no {
-            background: rgba(255, 255, 255, 0.8);
-            color: #666;
-            border: 1px solid rgba(0, 0, 0, 0.1);
-        }
+    .btn-no {
+      background: rgba(255, 255, 255, 0.9);
+      color: #666;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
 
-        #no:hover {
-            background: rgba(255, 255, 255, 1);
-        }
+    .btn-no:hover {
+      background: rgba(255, 255, 255, 1);
+    }
 
-        /* Modals */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            z-index: 999;
-            justify-content: center;
-            align-items: center;
-        }
+    /* Modals */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 999;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .modal-content {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(12px);
-            padding: 30px;
-            border-radius: 16px;
-            text-align: center;
-            max-width: 400px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            animation: modalFade 0.3s ease-out;
-        }
+    .modal-content {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      width: 80%;
+      max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      animation: modalFade 0.3s ease-out;
+      position: relative;
+    }
 
-        /* Form Styles */
-        /* Updated Elegant Form Styles */
-        .form-content {
-            padding: 2rem;
-        }
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #666;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
 
-        .form-title {
-            color: #ff4d4d;
-            font-size: 1.8rem;
-            margin-bottom: 2rem;
-            font-weight: 300;
-            letter-spacing: -0.5px;
-            position: relative;
-            padding-bottom: 1rem;
-        }
+    .modal-close:hover {
+      color: #ff4d4d;
+    }
 
-        .form-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 2px;
-            background: rgba(255, 77, 77, 0.2);
-        }
+    /* Forms */
+    .form-group {
+      margin-bottom: 1.5rem;
+      text-align: left;
+    }
 
-        .form-group {
-            margin-bottom: 2rem;
-            position: relative;
-        }
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #666;
+      font-weight: 500;
+    }
 
-        .form-group label {
-            position: absolute;
-            left: 1rem;
-            top: 1.1rem;
-            color: #888;
-            pointer-events: none;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-        }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 1rem 0rem;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: rgba(255, 255, 255, 0.9);
+    }
 
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 1.5rem 0.5rem;
-            border: none;
-            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
-            font-size: 1rem;
-            background: transparent;
-            transition: all 0.3s ease;
-        }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
 
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #ff4d4d;
-            box-shadow: 0 2px 0 0 rgba(255, 77, 77, 0.1);
-        }
+    /* Alerts */
+    .alert {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .form-group input:focus+label,
-        .form-group input:not(:placeholder-shown)+label,
-        .form-group textarea:focus+label,
-        .form-group textarea:not(:placeholder-shown)+label {
-            transform: translateY(-120%);
-            font-size: 0.8rem;
-            color: #ff4d4d;
-        }
+    .alert-content {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      width: 90%;
+      max-width: 350px;
+      animation: modalFade 0.3s ease-out;
+    }
 
-        .form-group textarea {
-            min-height: 120px;
-            resize: none;
-            padding-top: 1.8rem;
-        }
+    .alert-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
 
-        .form-submit {
-            background: linear-gradient(135deg, #ff6b6b, #ff4d4d);
-            color: white;
-            border: none;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            letter-spacing: 0.5px;
-            box-shadow: 0 4px 15px rgba(255, 77, 77, 0.2);
-        }
+    /* Animations */
+    @keyframes heartbeat {
+      0% {
+        transform: scale(1);
+      }
 
-        .form-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 77, 77, 0.3);
-        }
+      50% {
+        transform: scale(1.02);
+      }
 
-        /* Custom Scrollbar for Textarea */
-        .form-group textarea::-webkit-scrollbar {
-            width: 6px;
-        }
+      100% {
+        transform: scale(1);
+      }
+    }
 
-        .form-group textarea::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-        }
+    @keyframes modalFade {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
 
-        .form-group textarea::-webkit-scrollbar-thumb {
-            background: rgba(255, 77, 77, 0.3);
-            border-radius: 4px;
-        }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-        /* Animations */
-        @keyframes heartbeat {
-            0% {
-                transform: scale(1);
-            }
+    /* Entry Popup Styles */
+    .entry-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
 
-            50% {
-                transform: scale(1.02);
-            }
+    .entry-popup-content {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      max-width: 65%;
+      animation: popUp 0.5s ease-out;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
 
-            100% {
-                transform: scale(1);
-            }
-        }
+    .entry-popup h3 {
+      color: #ff4d4d;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
 
-        @keyframes modalFade {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+    .entry-popup p {
+      color: #666;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
+    .entry-popup button {
+      background: #ff4d4d;
+      color: white;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.3s ease;
+    }
+
+    .entry-popup button:hover {
+      transform: scale(1.05);
+    }
+
+    @keyframes popUp {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    /* Footer */
+    footer {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #666;
+      font-size: 0.9rem;
+      text-align: center;
+      z-index: 1;
+    }
+
+    footer a {
+      color: #ff4d4d;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #ff1a1a;
+    }
+  </style>
 </head>
 
 <body>
-    <!-- Falling Hearts Container -->
-    <div class="hearts" id="hearts"></div>
+  <!-- Falling Hearts -->
+  <div class="hearts" id="hearts"></div>
 
-    <!-- Main Content -->
-    <div class="container">
-        <h1>Will You Be My Valentine? 💘</h1>
-        <p>Something tells me you’re the missing piece to a great Valentine’s Day. Want to test the theory?</p>
-        <div class="buttons">
-            <button id="yes">Absolutely Yes!</button>
-            <button id="no">No</button>
-        </div>
+  <!-- Main Content -->
+  <div class="container">
+    <h1>Will You Be My Valentine? 💘</h1>
+    <p>Something tells me you're the missing piece to a great Valentine's Day. Want to test the theory?</p>
+    <div class="buttons">
+      <button class="btn-yes" id="yes">Absolutely Yes!</button>
+      <button class="btn-no" id="no">No</button>
     </div>
+  </div>
 
-    <!-- Follow-up Yes Modal (Form) -->
-    <div class="modal" id="followUpYesModal">
-        <div class="modal-content">
-            <h2>Would you mind filling this out so I know you’re on board?</h2>
-            <form id="valentineForm">
-                <div class="form-group">
-                    <input type="text" placeholder="Enter your full name" id="fullName" required>
-                </div>
-                <div class="form-group">
-                    <textarea id="why" placeholder="Just curious—what made you say yes?" required></textarea>
-                </div>
-                <button type="submit" class="form-submit">Submit</button>
-            </form>
-        </div>
+  <!-- First Yes Confirmation Modal -->
+  <div class="modal" id="confirmYesModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('confirmYesModal')">×</button>
+      <h2>Did you just click yes?? 😊</h2>
+      <p>Would you be open to a simple coffee date and maybe a photobooth, if you're comfortable with that?</p>
+      <div class="buttons">
+        <button class="btn-yes" id="confirmYesFinal">Yes, I'm Sure!</button>
+        <button class="btn-no" onclick="closeModal('confirmYesModal')">Cancel</button>
+      </div>
     </div>
+  </div>
 
-    <!-- Follow-up No Modal (Form) -->
-    <div class="modal" id="followUpNoModal">
-        <div class="modal-content">
-            <h2>I Respect Your Decision 💐</h2>
-            <form id="noForm">
-                <div class="form-group">
-                    <textarea id="why" placeholder="Can You Share Your Reason?" required></textarea>
-                </div>
-                <button type="submit" class="form-submit">Submit</button>
-            </form>
+  <!-- Yes Form Modal -->
+  <div class="modal" id="yesFormModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('yesFormModal')">×</button>
+      <h2>Would you mind filling this out so I know you're on board?</h2>
+      <form id="valentineForm">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="fullName" required>
         </div>
+        <div class="form-group">
+          <label>Just curious—what made you say yes?</label>
+          <textarea id="why" required></textarea>
+        </div>
+        <button type="submit" class="btn-yes">Submit</button>
+      </form>
     </div>
+  </div>
 
-    <script>
-        document.querySelectorAll("input, textarea").forEach((element) => {
-            element.addEventListener("focus", function () {
-                this.dataset.placeholder = this.placeholder; // Store the placeholder
-                this.placeholder = ""; // Clear placeholder
-            });
+  <!-- No Form Modal -->
+  <div class="modal" id="noFormModal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal('noFormModal')">×</button>
+      <h2>We Respect Your Choice 💐</h2>
+      <form id="noForm">
+        <div class="form-group">
+          <label>Would You Share Your Reason?</label>
+          <textarea id="reason" required></textarea>
+        </div>
+        <button type="submit" class="btn-no">Submit</button>
+      </form>
+    </div>
+  </div>
 
-            element.addEventListener("blur", function () {
-                this.placeholder = this.dataset.placeholder; // Restore placeholder if empty
-            });
+  <!-- Success Alert -->
+  <div class="alert" id="successAlert">
+    <div class="alert-content">
+      <div class="alert-icon">🎉</div>
+      <h3>Thank You! 💌</h3>
+      <p>Your response has been sent! Let's enjoy a simple and fun Valentine's Day while we get to know each other more.</p>
+      <button class="btn-yes" onclick="closeAlert('successAlert')">Close</button>
+    </div>
+  </div>
+
+  <!-- Respect Alert -->
+  <div class="alert" id="respectAlert">
+    <div class="alert-content">
+      <div class="alert-icon">🌹</div>
+      <h3>Thank You</h3>
+      <p>Your honesty is appreciated. I can wait for another time or moment.</p>
+      <button class="btn-no" onclick="closeAlert('respectAlert')">Close</button>
+    </div>
+  </div>
+
+  <div class="entry-popup" id="entryPopup">
+    <div class="entry-popup-content">
+      <h3>Welcome! 💌</h3>
+      <p>I hope you will read my message whenever you have a moment. Take your time and go through it whenever it seems appropriate for you; there is absolutely no rush. I appreciate you taking the time to read it at your own free time, and I just wanted to share something that I think is worth your attention.</p>
+      <button onclick="closeEntryPopup()">I Understand</button>
+    </div>
+  </div>
+
+
+  <footer>
+    Made with ❤️ by <a href="https://www.facebook.com/makimascatt" target="_blank">Me</a>
+  </footer>
+
+  <script>
+    // Initialize EmailJS
+    emailjs.init("ITpKIq1Vuj7sDuACq"); // Replace with your EmailJS User ID
+
+    // Falling Hearts
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.innerHTML = '♥';
+      heart.style.left = Math.random() * 100 + '%';
+      heart.style.animationDuration = Math.random() * 3 + 9 + 's';
+      heart.style.animationDelay = Math.random() * 2 + 's';
+      document.getElementById('hearts').appendChild(heart);
+      setTimeout(() => heart.remove(), 12000);
+    }
+    setInterval(createHeart, 100);
+
+    // Modal Controls
+    document.getElementById('yes').addEventListener('click', () => showModal('confirmYesModal'));
+    document.getElementById('confirmYesFinal').addEventListener('click', () => {
+      closeModal('confirmYesModal');
+      showModal('yesFormModal');
+    });
+    document.getElementById('no').addEventListener('click', () => showModal('noFormModal'));
+
+    // Form Handling
+    document.getElementById('valentineForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fullName = document.getElementById('fullName').value;
+      const why = document.getElementById('why').value;
+
+      emailjs.send("default_service", "template_jtvhxya", {
+        full_name: fullName,
+        why: why,
+        reason: reason
+      })
+        .then(() => {
+          closeModal('yesFormModal');
+          showAlert('successAlert');
+          triggerConfetti();
+        })
+        .catch((error) => {
+          console.error('Email failed:', error);
+          alert("⚠️ Oops! Something went wrong. Please try again.");
         });
+    });
 
-        // Initialize EmailJS
-        emailjs.init("ITpKIq1Vuj7sDuACq"); // Replace with your EmailJS User ID
+    document.getElementById('noForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const reason = document.getElementById('reason').value;
 
-        // Falling Hearts Logic
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.className = 'heart';
-            heart.innerHTML = '♥';
-            heart.style.left = Math.random() * 100 + '%';
-            heart.style.animationDuration = Math.random() * 3 + 9 + 's';
-            heart.style.animationDelay = Math.random() * 2 + 's';
-            document.getElementById('hearts').appendChild(heart);
-            setTimeout(() => heart.remove(), 12000);
-        }
-        setInterval(createHeart, 400);
-
-        // Event Listeners
-        const yesButton = document.getElementById('yes');
-        const noButton = document.getElementById('no');
-        const valentineForm = document.getElementById('valentineForm');
-        const noForm = document.getElementById('noForm');
-
-        yesButton.addEventListener('click', () => showModal('followUpYesModal'));
-        noButton.addEventListener('click', () => showModal('followUpNoModal'));
-
-        // Handle "Yes" Form Submission
-        valentineForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const templateParams = {
-                full_name: document.getElementById('fullName').value,
-                why: document.getElementById('why').value,
-            };
-            emailjs.send("default_service", "template_jtvhxya", templateParams)
-                .then(() => {
-                    closeModal('followUpYesModal');
-                    triggerConfetti();
-                    showSuccessAlert();
-                })
-                .catch((error) => {
-                    console.error('Email failed:', error);
-                    alert("⚠️ Oops! Something went wrong. Please try again.");
-                });
+      emailjs.send("default_service", "template_jtvhxya", {
+        reason: reason,
+      })
+        .then(() => {
+          closeModal('noFormModal');
+          showAlert('respectAlert');
+        })
+        .catch((error) => {
+          console.error('Email failed:', error);
+          alert("⚠️ Oops! Something went wrong. Please try again.");
         });
+    });
 
-        // Handle "No" Form Submission
-        noForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const templateParams = {
-                reason: document.getElementById('reason').value,
-            };
-            emailjs.send("default_service", "template_jtvhxya", templateParams)
-                .then(() => {
-                    closeModal('followUpNoModal');
-                    showRejectionAlert();
-                })
-                .catch((error) => {
-                    console.error('Email failed:', error);
-                    alert("⚠️ Oops! Something went wrong. Please try again.");
-                });
-        });
+    // Confetti
+    function triggerConfetti() {
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0.6 },
+        colors: ['#ff4d4d', '#ff69b4', '#ff9f43']
+      });
+    }
 
-        // Confetti Effect
-        function triggerConfetti() {
-            confetti({
-                particleCount: 150,
-                spread: 100,
-                origin: { y: 0.6 },
-                colors: ['#ff4d4d', '#ff69b4', '#ff9f43']
-            });
-        }
+    // Helper Functions
+    function showModal(modalId) {
+      document.getElementById(modalId).style.display = 'flex';
+    }
 
-        // Modal Controls
-        function showModal(modalId) {
-            document.getElementById(modalId).style.display = 'flex';
-        }
+    function closeModal(modalId) {
+      document.getElementById(modalId).style.display = 'none';
+    }
 
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
+    function showAlert(alertId) {
+      document.getElementById(alertId).style.display = 'flex';
+    }
 
-        // Close modals on outside click
-        window.onclick = (event) => {
-            if (event.target.className === 'modal') {
-                event.target.style.display = 'none';
-            }
-        };
+    function closeAlert(alertId) {
+      document.getElementById(alertId).style.display = 'none';
+    }
 
-        function showSuccessAlert() {
-            Swal.fire({
-                title: "🎉 Thank you!",
-                text: "I'll cherish this opportunity! ❤️",
-                icon: "success",
-                confirmButtonColor: "#ff4d4d",
-                confirmButtonText: "Yay! 💘"
-            }).then(() => {
-                triggerConfetti();
-            });
-        }
-        function showRejectionAlert() {
-            Swal.fire({
-                title: "💐 Thank you for your honesty!",
-                text: "I respect your decision. I can wait for another time.",
-                icon: "info",
-                confirmButtonColor: "#666",
-                confirmButtonText: "Okay"
-            });
-        }
+    // Close on outside click
+    window.onclick = (event) => {
+      if (event.target.className === 'modal' || event.target.className === 'alert') {
+        event.target.style.display = 'none';
+      }
+    };
 
+    // Show pop-up when page loads
+    window.onload = function () {
+      document.getElementById('entryPopup').style.display = 'flex';
+    };
 
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    // Close pop-up function
+    function closeEntryPopup() {
+      document.getElementById('entryPopup').style.display = 'none';
+    }
+
+    // Close when clicking outside
+    document.getElementById('entryPopup').addEventListener('click', function (e) {
+      if (e.target === this) {
+        closeEntryPopup();
+      }
+    });
+  </script>
 </body>
 
 </html>
