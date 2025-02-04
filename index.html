@@ -135,19 +135,24 @@
       align-items: center;
     }
 
+    /* Updated Modal Content Styling */
     .modal-content {
       background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(12px);
-      padding: 20px;
+      padding: 40px 20px 20px;
+      /* Added top padding */
       border-radius: 16px;
       text-align: center;
-      width: 80%;
+      width: 90%;
       max-width: 400px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
       animation: modalFade 0.3s ease-out;
       position: relative;
+      margin: 20px;
+      /* Added margin */
     }
 
+    /* Updated Close Button Positioning */
     .modal-close {
       position: absolute;
       top: 15px;
@@ -158,6 +163,9 @@
       color: #666;
       cursor: pointer;
       transition: color 0.3s ease;
+      line-height: 1;
+      padding: 5px;
+      z-index: 1;
     }
 
     .modal-close:hover {
@@ -403,7 +411,8 @@
     <div class="alert-content">
       <div class="alert-icon">🎉</div>
       <h3>Thank You! 💌</h3>
-      <p>Your response has been sent! Let's enjoy a simple and fun Valentine's Day while we get to know each other more.</p>
+      <p>Your response has been sent! Let's enjoy a simple and fun Valentine's Day while we get to know each other more.
+      </p>
       <button class="btn-yes" onclick="closeAlert('successAlert')">Close</button>
     </div>
   </div>
@@ -421,7 +430,9 @@
   <div class="entry-popup" id="entryPopup">
     <div class="entry-popup-content">
       <h3>Welcome! 💌</h3>
-      <p>I hope you will read my message whenever you have a moment. Take your time and go through it whenever it seems appropriate for you; there is absolutely no rush. I appreciate you taking the time to read it at your own free time, and I just wanted to share something that I think is worth your attention.</p>
+      <p>I hope you will read my message whenever you have a moment. Take your time and go through it whenever it seems
+        appropriate for you; there is absolutely no rush. I appreciate you taking the time to read it at your own free
+        time, and I just wanted to share something that I think is worth your attention.</p>
       <button onclick="closeEntryPopup()">I Understand</button>
     </div>
   </div>
