@@ -439,7 +439,7 @@
 
 
   <footer>
-    Made with ❤️ by <a id="facebookLink" onclick="openFacebookApp()" href="#" target="_blank">Me</a>
+    Made with ❤️ by <a href="https://www.facebook.com/makimascatt" target="_blank">Me</a>
   </footer>
 
   <script>
@@ -556,31 +556,6 @@
         closeEntryPopup();
       }
     });
-
-    function openFacebookApp() {
-      // Check if mobile device
-      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-      // Facebook App URL scheme (replace YOUR_PROFILE_ID with actual ID/username)
-      const appUrl = 'fb://profile/makimascatt';
-      const webUrl = 'https://www.facebook.com/makimascatt';
-
-      if (isMobile) {
-        // Try to open app
-        window.location.href = appUrl;
-
-        // Fallback to web if app not installed
-        setTimeout(function () {
-          if (!document.hidden) {
-            window.location.href = webUrl;
-          }
-        }, 500);
-      } else {
-        window.open(webUrl, '_blank');
-      }
-
-      return false; // Prevent default link behavior
-    }
   </script>
 </body>
 
