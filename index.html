@@ -4,11 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Will you be my Valentines?</title>
+  <title>Will You Be My Valentine?</title>
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://valentinesforyou.vercel.app/">
   <meta property="og:title" content="I have something for you here!">
-  <meta property="og:description" content="I've created something special for you. I hope you'll take a moment to read it.">
+  <meta property="og:description"
+    content="I've created something special for you. I hope you'll take a moment to read it.">
   <meta property="og:image" content="https://github.com/josejardin/vals/blob/main/IMG_1485.jpg">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -347,17 +348,67 @@
     footer a:hover {
       color: #ff1a1a;
     }
+
+    /* Loading Animation Styles */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      backdrop-filter: blur(5px);
+    }
+
+    .loading-spinner {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #ff4d4d;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Update alert styles to prevent closing */
+    #successAlert .alert-content {
+      pointer-events: none;
+    }
+
+    #successAlert button {
+      display: none;
+    }
   </style>
 </head>
 
 <body>
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <p>Preparing something special...</p>
+  </div>
   <!-- Falling Hearts -->
   <div class="hearts" id="hearts"></div>
 
   <!-- Main Content -->
   <div class="container">
-    <h1>Will You Be My Valentine? 💘</h1>
-    <p>Something tells me you're the missing piece to a great Valentine's Day. Want to test the theory?</p>
+    <h1>Hello, Christine Reas!💘</h1>
+    <p>I've really enjoyed our conversations, I think it'd be fun to hang out in person. Would you like to go on a date
+      with me on February 14, 2025, if you're free?</p>
     <div class="buttons">
       <button class="btn-yes" id="yes">Absolutely Yes!</button>
       <button class="btn-no" id="no">No</button>
@@ -367,7 +418,6 @@
   <!-- First Yes Confirmation Modal -->
   <div class="modal" id="confirmYesModal">
     <div class="modal-content">
-      <button class="modal-close" onclick="closeModal('confirmYesModal')">×</button>
       <h2>Did you just click yes?? 😊</h2>
       <p>Would you be open to a simple coffee date and maybe a photobooth, if you're comfortable with that?</p>
       <div class="buttons">
@@ -400,7 +450,7 @@
   <div class="modal" id="noFormModal">
     <div class="modal-content">
       <button class="modal-close" onclick="closeModal('noFormModal')">×</button>
-      <h2>We Respect Your Choice 💐</h2>
+      <h2>I Respect Your Choice 💐</h2>
       <form id="noForm">
         <div class="form-group">
           <label>Would You Share Your Reason?</label>
@@ -418,7 +468,6 @@
       <h3>Thank You! 💌</h3>
       <p>Your response has been sent! Let's enjoy a simple and fun Valentine's Day while we get to know each other more.
       </p>
-      <button class="btn-yes" onclick="closeAlert('successAlert')">Close</button>
     </div>
   </div>
 
@@ -427,7 +476,7 @@
     <div class="alert-content">
       <div class="alert-icon">🌹</div>
       <h3>Thank You</h3>
-      <p>Your honesty is appreciated. I can wait for another time or moment.</p>
+      <p>I appreciate your honesty. I can wait for whenever the time is right.</p>
       <button class="btn-no" onclick="closeAlert('respectAlert')">Close</button>
     </div>
   </div>
@@ -435,16 +484,20 @@
   <div class="entry-popup" id="entryPopup">
     <div class="entry-popup-content">
       <h3>Welcome! 💌</h3>
-      <p>I hope you will read my message whenever you have a moment. Take your time and go through it whenever it seems
-        appropriate for you; there is absolutely no rush. I appreciate you taking the time to read it at your own free
-        time, and I just wanted to share something that I think is worth your attention. I hope you like it!</p>
+      <p>I hope you'll read my message whenever you have a moment. I'm really sorry that this has taken longer than
+        expected,
+        and I truly appreciate your patience. Take your time and go through it whenever it feels right-there's
+        absolutely no rush.
+        I appreciate you taking the time read it at your convenience, and I just wanted to ask and share something that
+        I believe is
+        worth your attention. I hope you like it!🌹
+      </p>
       <button onclick="closeEntryPopup()">I Understand</button>
     </div>
   </div>
 
-
   <footer>
-    Made with ❤️ by <a href="https://www.facebook.com/makimascatt" target="_blank">Me</a>
+    Made with ❤️ by <a href="https://www.facebook.com/makimascatt" target="_blank">Me(Jose Jardin)</a>
   </footer>
 
   <script>
@@ -472,26 +525,51 @@
     });
     document.getElementById('no').addEventListener('click', () => showModal('noFormModal'));
 
-    // Form Handling
     document.getElementById('valentineForm').addEventListener('submit', (e) => {
       e.preventDefault();
+
+      // Show thank you modal
+      showAlert('successAlert');
+
+      // Get form values
       const fullName = document.getElementById('fullName').value;
       const why = document.getElementById('why').value;
 
+      // Send email (optional)
       emailjs.send("default_service", "template_jtvhxya", {
         full_name: fullName,
         why: why,
-        reason: reason
-      })
-        .then(() => {
-          closeModal('yesFormModal');
-          showAlert('successAlert');
-          triggerConfetti();
-        })
-        .catch((error) => {
-          console.error('Email failed:', error);
-          alert("⚠️ Oops! Something went wrong. Please try again.");
+      }).catch(error => console.error('Email error:', error));
+
+      // Trigger confetti
+      triggerConfetti();
+      // Confetti function
+      function triggerConfetti() {
+        confetti({
+          particleCount: 850,
+          spread: 300,
+          origin: { y: 0.6 },
+          colors: ['#ff4d4d', '#ff69b4', '#ff9f43'],
+          scalar: 1.2,
         });
+      }
+
+      // Start redirect countdown
+      let seconds = 5;
+      const countdownElement = document.createElement('div');
+      countdownElement.style.marginTop = '15px';
+      countdownElement.style.color = '#ff4d4d';
+      document.querySelector('#successAlert .alert-content').appendChild(countdownElement);
+
+      const countdown = setInterval(() => {
+        seconds--;
+        countdownElement.innerHTML = `Please wait a moment in ${seconds} seconds...`;
+
+        if (seconds <= 0) {
+          clearInterval(countdown);
+          window.location.href = 'https://youtu.be/2Vv-BfVoq4g?si=SvsTP5ikuytcz5E_&t=118';
+        }
+      }, 1000);
     });
 
     document.getElementById('noForm').addEventListener('submit', (e) => {
